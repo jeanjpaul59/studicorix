@@ -1,0 +1,179 @@
+﻿<!DOCTYPE html>
+<html lang='fr'>
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <title>Geometrie_des_verres</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; background: #f7f7f7; color: #222; }
+    h1 { margin-bottom: 6px; overflow-wrap: anywhere; }
+    .subtitle { color: #666; margin-bottom: 20px; }
+    .toolbar { margin-bottom: 20px; }
+    .toolbar button { margin-right: 10px; padding: 8px 12px; cursor: pointer; }
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,260px),1fr)); gap: 16px; }
+    .flashcard { perspective: 1000px; cursor: pointer; height: 260px; min-width: 0; }
+    .flashcard-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
+    .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+    .flashcard-front, .flashcard-back { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); padding: 16px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
+    .flashcard-front { background: #ffffff; border: 1px solid #ddd; }
+    .flashcard-back { background: #eef4ff; border: 1px solid #c7d7f2; transform: rotateY(180deg); }
+    .question { font-size: 22px; font-weight: bold; line-height: 1.35; max-height: 100%; overflow-y: auto; overflow-wrap: anywhere; width: 100%; scrollbar-width: thin; }
+    .note { margin-top: 10px; font-size: 15px; color: #1f4e79; font-weight: normal; }
+    .answer { font-size: 17px; font-weight: normal; color: #003366; line-height: 1.4; max-height: 100%; overflow-y: auto; overflow-wrap: anywhere; width: 100%; scrollbar-width: thin; overscroll-behavior: contain; }
+    .hint { margin-top: 18px; color: #666; font-size: 14px; }
+    @media (max-width: 600px) { body { margin: 14px; } .flashcard { height: 280px; } .question { font-size: 20px; } }
+  </style>
+  <script>
+    function flipAll() { document.querySelectorAll('.flashcard').forEach(el => el.classList.add('flipped')); }
+    function unflipAll() { document.querySelectorAll('.flashcard').forEach(el => el.classList.remove('flipped')); }
+    function fitAnswers() {
+      document.querySelectorAll('.answer').forEach(el => {
+        const n = el.textContent.trim().length;
+        el.style.fontSize = (n < 100 ? 17 : n < 200 ? 15 : n < 350 ? 14 : 13) + 'px';
+      });
+    }
+    document.addEventListener('DOMContentLoaded', fitAnswers);
+  </script>
+</head>
+<body>
+  <h1>Geometrie_des_verres</h1>
+  <div class='subtitle'>FR-FR</div>
+  <div class='toolbar'>
+    <button onclick='flipAll()'>Tout retourner</button>
+    <button onclick='unflipAll()'>Tout remettre</button>
+  </div>
+  <div class='cards-grid'>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Géométrie du verre      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>La géométrie d'un verre en optique désigne la forme et les dimensions physiques du verre, qui influencent la manière dont il réfracte, réfléchit et transmet la lumière.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Verre sphérique      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Un verre sphérique est un corps transparent limité par 2 surfaces sphériques dont les 2 faces sont des portions de sphères ou dont une face est sphérique et l'autre plane et qui ont la propriété de faire dévier les rayons lumineux par réfraction sur ces surfaces.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Dioptre      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Un dioptre est une surface séparant 2 millieux d'indices de réfraction différents.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Dioptre sphérique      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>On appelle &quot;dioptre sphérique&quot; une surface sphérique séparant 2 millieux d'indice différent (l'air et le verre en lunetterie).</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Faces convexes et concaves      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Les faces d'un verre peuvent être convexes (&quot;bosses&quot;) ou concaves (&quot;creux&quot;).</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Calotte sphérique      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>La calotte d'un verre sphérique (ou calotte sphérique) est la portion de surface d'une sphère délimitée par un plan.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Axe optique ou principal      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Les centres des sphères sont alignés sur une droite appelée axe optique.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Centre optique      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Sur le 1er schéma, on distingue le centre de la lentille, appelé centre optique, O, ainsi qu'une droite imaginaire appelée axe optique, perpendiculaire à la lentille et passant par O.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Verre ménisque      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>On appelle verre ménisque, un verre dont le dioptre avant est convexe et le dioptre arrière est concave.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Verre biconcave      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Sauf dans le cas particulier du verre biconcave qui possède 2 faces concaves.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Verre biconvexe      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Et du verre biconvexe qui possède 2 faces convexes</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Verre plan concave      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Ou du verre plan-concave qui possède une face plane et une face concave.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Verre plan convexe      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Et du verre plan-convexe qui possède une face plane et une face convexe.</div>
+    </div>
+  </div>
+</div>
+  </div>
+  <div class='hint'>Clique sur une carte pour voir la réponse. Les définitions longues peuvent défiler dans la carte.</div>
+</body>
+</html>

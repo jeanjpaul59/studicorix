@@ -1,0 +1,407 @@
+﻿<!DOCTYPE html>
+<html lang='fr'>
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <title>Astigmatisme</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; background: #f7f7f7; color: #222; }
+    .wrap { max-width: 1180px; margin: 0 auto; }
+    h1 { margin-bottom: 6px; line-height: 1.2; }
+    .subtitle { color: #666; margin-bottom: 18px; }
+    .toolbar-top { margin-bottom: 18px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .toolbar-top button { padding: 12px 16px; font-size: 15px; cursor: pointer; }
+    .card { background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .topline { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+    .counter { font-size: 18px; color: #444; }
+    .question-label, .answer-label { font-weight: bold; font-size: 16px; margin-bottom: 8px; }
+    .grid2 { display: grid; grid-template-columns: 1.15fr 1fr; gap: 18px; }
+    .panel { border: 1px solid #d8d8d8; border-radius: 10px; padding: 18px; min-height: 180px; background: #fafafa; }
+    .question-panel { min-height: 220px; }
+    .answer-panel { min-height: 180px; }
+    .question { font-size: clamp(24px, 2.4vw, 34px); font-weight: bold; line-height: 1.35; word-break: normal; overflow-wrap: anywhere; white-space: pre-wrap; }
+    .question.long-question { font-size: clamp(20px, 1.9vw, 28px); font-weight: 600; line-height: 1.45; }
+    .speak-btn { padding: 6px 10px; font-size: 18px; cursor: pointer; border-radius: 8px; border: 1px solid #bbb; background: #f1f1f1; }
+    .note { margin-top: 12px; color: #1f4e79; font-size: 18px; line-height: 1.4; }
+    .answer-wrap { display: flex; gap: 10px; align-items: stretch; }
+    .answer-main { flex: 1; }
+    textarea.answer-input { width: 100%; min-height: 150px; padding: 14px; font-family: Arial, sans-serif; font-size: 20px; line-height: 1.45; border: 1px solid #bbb; border-radius: 8px; box-sizing: border-box; resize: vertical; overflow-y: auto; }
+    .help-btn { width: 64px; min-width: 64px; border: 1px solid #7ea1c9; background: #dfeaf8; border-radius: 8px; font-size: 28px; cursor: pointer; }
+    .help-btn:disabled { opacity: 0.5; cursor: default; }
+    .info-row { margin-top: 18px; display: grid; grid-template-columns: repeat(4, minmax(120px, 1fr)); gap: 12px; }
+    .info-box { border: 1px solid #ddd; background: #fafafa; border-radius: 8px; padding: 10px 12px; }
+    .info-label { color: #666; font-size: 13px; margin-bottom: 4px; }
+    .info-value { font-size: 20px; }
+    .review-yes { color: #b00020; font-weight: bold; }
+    .review-no { color: #0a7a20; font-weight: bold; }
+    .nav-row { margin-top: 18px; display: grid; grid-template-columns: 1fr 160px 1fr; gap: 10px; align-items: center; }
+    .nav-row button { padding: 14px 18px; font-size: 18px; min-height: 52px; cursor: pointer; }
+    .langpair { text-align: center; border: 1px solid #ddd; background: #fafafa; border-radius: 8px; padding: 14px 10px; font-size: 20px; }
+    .status-line { margin-top: 14px; min-height: 28px; font-size: 16px; }
+    .warn { color: #9a6700; font-weight: bold; }
+    .ok { color: #0a7a20; font-weight: bold; }
+    .done { text-align: center; padding: 36px; }
+    .done h2 { margin-bottom: 16px; }
+    .done .big { font-size: 28px; font-weight: bold; margin-bottom: 18px; }
+    @media (max-width: 760px) {
+      body { margin: 12px; }
+      .grid2 { grid-template-columns: 1fr; }
+      .question { font-size: 24px; }
+      .question.long-question { font-size: 20px; }
+      textarea.answer-input { min-height: 130px; font-size: 18px; }
+      .info-row { grid-template-columns: 1fr 1fr; }
+      .nav-row { grid-template-columns: 1fr; }
+      .langpair { order: -1; }
+      .toolbar-top button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class='wrap'>
+    <h1>Astigmatisme</h1>
+    <div class='subtitle'>FR-FR</div>
+    <div class='toolbar-top'>
+      <button onclick='restartSession()'>Recommencer cette session</button>
+      <button onclick='reviewPending()'>Revoir éléments non validés</button>
+      <button onclick='shuffleQuestions()'>Mélanger les questions</button>
+      <button onclick='resetProgress()'>Réinitialiser la progression</button>
+    </div>
+    <div class='card' id='quizCard'></div>
+  </div>
+  <script>
+    const quizId = 3;
+    const storageKey = 'lexiry_typing_' + quizId;
+    const orderKey = storageKey + '_order';
+    const items = [
+      {id: 18, q: "Astigmatisme", a: "L’astigmatisme est lié à un défaut de convergence de l’image au niveau de la rétine.", note: "", levelId: 1, levelName: "Débutant", charsPerAllowedError: 5, allowedErrors: 16},
+      {id: 19, q: "Astigmatisme", a: "L’astigmatisme est lié à un défaut de convergence de l’image au niveau de la rétine.", note: "", levelId: 1, levelName: "Débutant", charsPerAllowedError: 5, allowedErrors: 16},
+      {id: 20, q: "Correction torique", a: "Un verre, une lentille ou un implant torique sont constitués d’une sphère, d’un cylindre et d’un axe.", note: "", levelId: 1, levelName: "Débutant", charsPerAllowedError: 5, allowedErrors: 20},
+      {id: 21, q: "Grand et petit méridiens", a: "Le grand méridien a un rayon de courbure élevé, le petit méridien à un faible rayon de courbure. De l’importance du rayon de courbure dépend la convergence de la cornée. Le petit méridien est très convergent, alors que le grand méridien est moins convergent.", note: "", levelId: 1, levelName: "Débutant", charsPerAllowedError: 5, allowedErrors: 51},
+      {id: 22, q: "Astigmatisme régulier", a: "Ce type d’astigmatisme se caractérise par la déformation de la cornée dans un seul axe.", note: "", levelId: 1, levelName: "Débutant", charsPerAllowedError: 5, allowedErrors: 17},
+      {id: 23, q: "Astigmatisme irrégulier", a: "Dans les cas simples, les deux méridiens ne se croisent plus sur le même axe.", note: "", levelId: 1, levelName: "Débutant", charsPerAllowedError: 5, allowedErrors: 15},
+      {id: 24, q: "Astigmatisme direct", a: "L’axe le plus cambré est vertical (90), le moins cambré horizontal.", note: "", levelId: 1, levelName: "Débutant", charsPerAllowedError: 5, allowedErrors: 13},
+      {id: 25, q: "Astigmatisme indirect", a: "Dans ce cas, l’axe le plus cambré est l’horizontal (0°), le moins cambré vertical.", note: "", levelId: 1, levelName: "Débutant", charsPerAllowedError: 5, allowedErrors: 16},
+      {id: 26, q: "Astigmatisme oblique", a: "On parle d’astigmatisme oblique lorsque les axes ne sont ni verticaux ni horizontaux (45°)", note: "", levelId: 1, levelName: "Débutant", charsPerAllowedError: 5, allowedErrors: 18},
+      {id: 27, q: "Astigmatisme simple", a: "AST simple est celui dont l’une des lignes focales est situés sur la rétine (emmétrope) et l’autre en arrière ou en avant d’elle.", note: "", levelId: 1, levelName: "Débutant", charsPerAllowedError: 5, allowedErrors: 25},
+      {id: 28, q: "Astigmatisme myopique simple", a: "AST myopique simple : un des deux axes est myope, CAD se concentre devant la rétine et l’autre se concentre sur la rétine.", note: "", levelId: 1, levelName: "Débutant", charsPerAllowedError: 5, allowedErrors: 24},
+      {id: 29, q: "Astigmatisme hypermétropique simple", a: "AST hypermétropique simple : un des 2 axes est hypermétrope, CAD se concentre derrière la rétine et l’autre se concentre sur la rétine.", note: "", levelId: 1, levelName: "Débutant", charsPerAllowedError: 5, allowedErrors: 27},
+      {id: 30, q: "Astigmatisme composé", a: "AST composé se produit lorsqu’aucune des lignes focales ne se repose sur la rétine et qu’aucun axe n’es emmétrope.", note: "", levelId: 1, levelName: "Débutant", charsPerAllowedError: 5, allowedErrors: 22},
+      {id: 31, q: "Astigmatisme composé myopique", a: "AST composé myopique : lorsque les 2 axes sont myopes, CAD qu’ils se concentrent devant la rétine.", note: "", levelId: 1, levelName: "Débutant", charsPerAllowedError: 5, allowedErrors: 19},
+      {id: 32, q: "Astigmatisme composé hypermétropique", a: "AST composé hypermétropique : lorsque les axes yeux sont hypermétropes, CAD qu’ils se concentrent derrière la rétine.", note: "", levelId: 1, levelName: "Débutant", charsPerAllowedError: 5, allowedErrors: 23},
+      {id: 33, q: "Astigmatisme mixte", a: "Lorsqu’un axe est myope et l’autre hypermétrope, CAD qu’un axe se concentre devant la rétine et l’autre derrière.", note: "", levelId: 1, levelName: "Débutant", charsPerAllowedError: 5, allowedErrors: 22},
+      {id: 34, q: "Droite focale", a: "Lorsqu’un faisceau de rayons parallèles passe à travers un dioptre cylindrique les rayons vont converger en une droite, appelée droite focale.", note: "", levelId: 1, levelName: "Débutant", charsPerAllowedError: 5, allowedErrors: 28},
+      {id: 35, q: "Cercle de moindre diffusion", a: "Les 2 segments des droites reproduits sont les diamètres extrêmes de la forme ellipsoïdale : entre eux, il existe un endroit où la section du faisceau est circulaire. Ce cercle représente une image semblable mais floue du point objet et est appelé \"cercle de moindre diffusion\".", note: "", levelId: 1, levelName: "Débutant", charsPerAllowedError: 5, allowedErrors: 55},
+      {id: 36, q: "Degré d’astigmatisme", a: "Le degré d’AST, exprimé en dioptries, est alors égal à la différence de vergence (puissance optique) entre les 2 méridiens principaux.", note: "", levelId: 1, levelName: "Débutant", charsPerAllowedError: 5, allowedErrors: 26}
+    ];
+    let currentItems = [...items];
+    let currentIndex = 0;
+    let currentMode = 'all';
+    let savedResults = JSON.parse(localStorage.getItem(storageKey) || '{}');
+    function speak(text) {
+      if (!text) return;
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'ru-RU';
+      speechSynthesis.speak(utterance);
+    }
+    function saveResults() {
+      localStorage.setItem(storageKey, JSON.stringify(savedResults));
+    }
+    function saveOrder() {
+      localStorage.setItem(orderKey, JSON.stringify(currentItems.map(item => item.id)));
+    }
+    function loadSavedOrder() {
+      const savedOrder = JSON.parse(localStorage.getItem(orderKey) || 'null');
+      if (!savedOrder || !Array.isArray(savedOrder) || savedOrder.length !== items.length) return false;
+      const map = new Map(items.map(item => [item.id, item]));
+      const reordered = savedOrder.map(id => map.get(id)).filter(Boolean);
+      if (reordered.length !== items.length) return false;
+      currentItems = reordered;
+      return true;
+    }
+    function shuffleArray(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+    }
+    function getDefaultState(item) {
+      return {
+        userAnswer: '',
+        errorCount: 0,
+        helpCount: 0,
+        isCorrect: false,
+        isMarkedForReview: true,
+        status: 'unanswered'
+      };
+    }
+    function getState(item) {
+      if (!savedResults[item.id]) {
+        savedResults[item.id] = getDefaultState(item);
+      }
+      return savedResults[item.id];
+    }
+    function recomputeState(item) {
+      const st = getState(item);
+      const isCorrect = (normalizeForComparison(st.userAnswer) === normalizeForComparison(item.a));
+      st.isCorrect = isCorrect;
+      if (isCorrect) {
+        st.isMarkedForReview = (st.errorCount > item.allowedErrors);
+        st.status = st.isMarkedForReview ? 'review' : 'correct';
+      } else {
+        st.isMarkedForReview = true;
+        st.status = (st.userAnswer === '') ? 'unanswered' : 'partial';
+      }
+      saveResults();
+    }
+    function getPendingItems() {
+      return items.filter(item => {
+        const st = getState(item);
+        return !(st.isCorrect === true && st.isMarkedForReview === false);
+      });
+    }
+    function getValidCount() {
+      return items.filter(item => {
+        const st = getState(item);
+        return st.isCorrect === true && st.isMarkedForReview === false;
+      }).length;
+    }
+    function getCorrectCount() {
+      return items.filter(item => getState(item).isCorrect === true).length;
+    }
+    function getStartedCount() {
+      return items.filter(item => getState(item).userAnswer !== '').length;
+    }
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+    function renderQuestion() {
+      const card = document.getElementById('quizCard');
+      if (currentItems.length === 0) { renderEmpty(); return; }
+      if (currentIndex < 0) currentIndex = 0;
+      if (currentIndex >= currentItems.length) { renderDone(); return; }
+      const item = currentItems[currentIndex];
+      const st = getState(item);
+      const questionClass = item.q.length > 90 ? 'question long-question' : 'question';
+      recomputeState(item);
+      card.innerHTML =
+        '<div class="topline">' +
+          '<div class="counter">Question ' + (currentIndex + 1) + ' / ' + currentItems.length + '</div>' +
+          '<div class="counter">Validés : ' + getValidCount() + ' / ' + items.length + ' — Commencés : ' + getStartedCount() + ' / ' + items.length + '</div>' +
+        '</div>' +
+        '<div class="grid2">' +
+          '<div>' +
+            '<div class="question-label">Question</div>' +
+            '<div class="panel question-panel"><div class="' + questionClass + '">' + escapeHtml(item.q) + '</div>' + (item.note ? '<div class="note">[' + escapeHtml(item.note) + ']</div>' : '') + '</div>' +
+          '</div>' +
+          '<div>' +
+            '<div class="answer-label">Réponse</div>' +
+            '<div class="panel answer-panel"><div class="answer-wrap"><div class="answer-main"><textarea class="answer-input" id="userAnswer" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" inputmode="text">' + escapeHtml(st.userAnswer) + '</textarea></div><button class="help-btn" id="btnHelp" title="Révéler le caractère suivant">?</button></div><div class="status-line" id="statusLine"></div></div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="nav-row">' +
+          '<button id="btnPrev">&lt;-- Précédent</button>' +
+          '<div class="langpair">' + escapeHtml('FR-FR') + '</div>' +
+          '<button id="btnNext">Suivant --&gt;</button>' +
+        '</div>' +
+        '<div class="info-row">' +
+          '<div class="info-box"><div class="info-label">Nb d’erreurs</div><div class="info-value" id="errorCount">' + st.errorCount + '</div></div>' +
+          '<div class="info-box"><div class="info-label">Nb d’erreurs autorisées</div><div class="info-value">' + item.allowedErrors + '</div></div>' +
+          '<div class="info-box"><div class="info-label">Tolérance d’erreurs</div><div class="info-value">' + escapeHtml(item.levelName || '') + '</div></div>' +
+          '<div class="info-box"><div class="info-label">À revoir</div><div id="reviewFlag" class="info-value ' + (st.isMarkedForReview ? 'review-yes' : 'review-no') + '">' + (st.isMarkedForReview ? 'Oui' : 'Non') + '</div></div>' +
+        '</div>';
+      const input = document.getElementById('userAnswer');
+      const btnHelp = document.getElementById('btnHelp');
+      const btnPrev = document.getElementById('btnPrev');
+      const btnNext = document.getElementById('btnNext');
+      const btnSpeakQuestion = document.getElementById('btnSpeakQuestion');
+      if (btnSpeakQuestion) btnSpeakQuestion.addEventListener('click', function() { st.errorCount += 1; recomputeState(item); updateStatusLine(); speak(item.a); });
+      input.focus();
+      input.setSelectionRange(input.value.length, input.value.length);
+      btnPrev.disabled = (currentIndex === 0);
+      btnHelp.disabled = st.isCorrect || st.userAnswer.length >= item.a.length;
+      updateStatusLine();
+      input.addEventListener('paste', function(e) { e.preventDefault(); });
+      let isComposing = false;
+      input.addEventListener('compositionstart', function() { isComposing = true; });
+      input.addEventListener('compositionend', function() { isComposing = false; handleTyping(item); });
+      input.addEventListener('input', function(e) { if (!isComposing && !e.isComposing) handleTyping(item); });
+      btnHelp.addEventListener('click', function() {
+        revealNextLetter(item);
+      });
+      btnPrev.addEventListener('click', function() { previousQuestion(); });
+      btnNext.addEventListener('click', function() { nextQuestion(); });
+    }
+    function updateStatusLine() {
+      const item = currentItems[currentIndex];
+      if (!item) return;
+      const st = getState(item);
+      const el = document.getElementById('statusLine');
+      if (!el) return;
+      if (st.isCorrect) {
+        el.innerHTML = '<span class="ok">Réponse complète.</span>';
+      } else if (st.userAnswer !== '') {
+        el.innerHTML = '<span class="warn">Réponse en cours.</span>';
+      } else {
+        el.innerHTML = '';
+      }
+      const err = document.getElementById('errorCount');
+      const rev = document.getElementById('reviewFlag');
+      const btnHelp = document.getElementById('btnHelp');
+      if (err) err.textContent = st.errorCount;
+      if (rev) {
+        rev.textContent = st.isMarkedForReview ? 'Oui' : 'Non';
+        rev.className = 'info-value ' + (st.isMarkedForReview ? 'review-yes' : 'review-no');
+      }
+      if (btnHelp) btnHelp.disabled = st.isCorrect || st.userAnswer.length >= item.a.length;
+    }
+    function normalizeForComparison(text) {
+      return String(text || '').normalize('NFC')
+        .replace(/[‘’'`´]/g, String.fromCharCode(39))
+        .replace(/[\u00AB\u00BB\u201C\u201D\u201E\u201F]/g, String.fromCharCode(34))
+        .replace(/[\u00A0\u202F]/g, ' ')
+        .replace(/œ/g, 'oe').replace(/Œ/g, 'Oe')
+        .replace(/\s*(")\s*/g, '$1')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLocaleLowerCase('fr');
+    }
+    function handleTyping(item) {
+      const input = document.getElementById('userAnswer');
+      const st = getState(item);
+      const previous = st.userAnswer || '';
+      const typed = input.value || '';
+      if (typed === previous) return;
+      if (typed.length < previous.length) {
+        st.userAnswer = typed;
+        recomputeState(item);
+        updateStatusLine();
+        return;
+      }
+      const normalizedTyped = normalizeForComparison(typed);
+      const normalizedExpected = normalizeForComparison(item.a);
+      if (normalizedExpected.startsWith(normalizedTyped) && normalizedTyped.length <= normalizedExpected.length) {
+        let pos = 0;
+        while (pos < item.a.length && normalizeForComparison(item.a.substring(0, pos + 1)).length <= normalizedTyped.length) pos++;
+        const canonical = item.a.substring(0, pos);
+        st.userAnswer = (canonical.length < typed.length && normalizeForComparison(canonical) === normalizedTyped) ? canonical : typed;
+        input.value = st.userAnswer;
+        input.setSelectionRange(input.value.length, input.value.length);
+      } else {
+        st.errorCount += 1;
+        input.value = previous;
+        input.setSelectionRange(previous.length, previous.length);
+      }
+      recomputeState(item);
+      updateStatusLine();
+    }
+    function revealNextLetter(item) {
+      const input = document.getElementById('userAnswer');
+      const st = getState(item);
+      if (st.isCorrect) return;
+      const nextPos = st.userAnswer.length + 1;
+      if (nextPos > item.a.length) return;
+      st.userAnswer = item.a.substring(0, nextPos);
+      st.errorCount += 1;
+      st.helpCount += 1;
+      input.value = st.userAnswer;
+      input.setSelectionRange(st.userAnswer.length, st.userAnswer.length);
+      recomputeState(item);
+      updateStatusLine();
+      input.focus();
+    }
+    function nextQuestion() {
+      currentIndex += 1;
+      renderQuestion();
+    }
+    function previousQuestion() {
+      if (currentIndex > 0) {
+        currentIndex -= 1;
+        renderQuestion();
+      }
+    }
+    function shuffleQuestions() {
+      const currentId = currentItems[currentIndex] ? currentItems[currentIndex].id : null;
+      currentMode = 'all';
+      currentItems = [...items];
+      if (currentItems.length > 1) {
+        let attempts = 0;
+        do {
+          shuffleArray(currentItems);
+          attempts += 1;
+        } while (currentItems[0].id === currentId && attempts < 10);
+      }
+      currentIndex = 0;
+      saveOrder();
+      renderQuestion();
+    }
+    function restartSession() {
+      if (!confirm('Recommencer la session depuis zéro ?')) return;
+      items.forEach(item => {
+        savedResults[item.id] = getDefaultState(item);
+      });
+      saveResults();
+      currentMode = 'all';
+      if (!loadSavedOrder()) currentItems = [...items];
+      currentIndex = 0;
+      renderQuestion();
+    }
+    function reviewPending() {
+      const pendingItems = getPendingItems();
+      if (pendingItems.length === 0) {
+        alert('Tout est validé.');
+        return;
+      }
+      pendingItems.forEach(item => {
+        savedResults[item.id] = getDefaultState(item);
+      });
+      saveResults();
+      currentMode = 'pending';
+      currentItems = pendingItems;
+      currentIndex = 0;
+      renderQuestion();
+    }
+    function resetProgress() {
+      if (!confirm('Effacer toute la progression mémorisée ?')) return;
+      localStorage.removeItem(storageKey);
+      localStorage.removeItem(orderKey);
+      savedResults = {};
+      currentItems = [...items];
+      currentIndex = 0;
+      currentMode = 'all';
+      renderQuestion();
+    }
+    function renderDone() {
+      const card = document.getElementById('quizCard');
+      const sessionCorrectCount = currentItems.filter(item => getState(item).isCorrect === true).length;
+      const sessionTotal = currentItems.length;
+      const validCount = getValidCount();
+      const pendingCount = getPendingItems().length;
+      card.innerHTML =
+        '<div class="done">' +
+        '<h2>Session terminée</h2>' +
+        '<div class="big">Mots trouvés dans cette session : ' + sessionCorrectCount + ' / ' + sessionTotal + '</div>' +
+        '<div style="margin-bottom:10px;">Progression générale — Validés dans la tolérance : ' + validCount + ' / ' + items.length + '</div>' +
+        '<div style="margin-bottom:20px;">Éléments à revoir : ' + pendingCount + '</div>' +
+        '<button onclick="restartSession()">Recommencer cette session</button> ' +
+        '<button onclick="reviewPending()">Revoir éléments non validés</button>' +
+        '</div>';
+    }
+    function renderEmpty() {
+      const card = document.getElementById('quizCard');
+      card.innerHTML =
+        '<div class="done">' +
+        '<h2>Aucun élément à afficher</h2>' +
+        '<button onclick="restartSession()">Revenir à la session complète</button>' +
+        '</div>';
+    }
+    loadSavedOrder();
+    saveOrder();
+    renderQuestion();
+  </script>
+</body>
+</html>

@@ -1,0 +1,949 @@
+﻿<!DOCTYPE html>
+<html lang='fr'>
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <title>Technologie lunette — Révision générale (test aléatoire)</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; background: #f7f7f7; color: #222; }
+    h1 { margin-bottom: 6px; overflow-wrap: anywhere; }
+    .subtitle { color: #666; margin-bottom: 20px; }
+    .toolbar { margin-bottom: 20px; }
+    .toolbar button { margin-right: 10px; padding: 8px 12px; cursor: pointer; }
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,260px),1fr)); gap: 16px; }
+    .flashcard { perspective: 1000px; cursor: pointer; height: 260px; min-width: 0; }
+    .flashcard-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
+    .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+    .flashcard-front, .flashcard-back { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); padding: 16px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
+    .flashcard-front { background: #ffffff; border: 1px solid #ddd; }
+    .flashcard-back { background: #eef4ff; border: 1px solid #c7d7f2; transform: rotateY(180deg); }
+    .question { font-size: 22px; font-weight: bold; line-height: 1.35; max-height: 100%; overflow-y: auto; overflow-wrap: anywhere; width: 100%; scrollbar-width: thin; }
+    .note { margin-top: 10px; font-size: 15px; color: #1f4e79; font-weight: normal; }
+    .answer { font-size: 17px; font-weight: normal; color: #003366; line-height: 1.4; max-height: 100%; overflow-y: auto; overflow-wrap: anywhere; width: 100%; scrollbar-width: thin; overscroll-behavior: contain; }
+    .hint { margin-top: 18px; color: #666; font-size: 14px; }
+    @media (max-width: 600px) { body { margin: 14px; } .flashcard { height: 280px; } .question { font-size: 20px; } }
+  </style>
+  <script>
+    function flipAll() { document.querySelectorAll('.flashcard').forEach(el => el.classList.add('flipped')); }
+    function unflipAll() { document.querySelectorAll('.flashcard').forEach(el => el.classList.remove('flipped')); }
+    function fitAnswers() {
+      document.querySelectorAll('.answer').forEach(el => {
+        const n = el.textContent.trim().length;
+        el.style.fontSize = (n < 100 ? 17 : n < 200 ? 15 : n < 350 ? 14 : 13) + 'px';
+      });
+    }
+    document.addEventListener('DOMContentLoaded', fitAnswers);
+  </script>
+</head>
+<body>
+  <h1>Technologie lunette — Révision générale (test aléatoire)</h1>
+  <div class='subtitle'>FR-FR</div>
+  <div class='toolbar'>
+    <button onclick='flipAll()'>Tout retourner</button>
+    <button onclick='unflipAll()'>Tout remettre</button>
+  </div>
+  <div class='cards-grid'>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Verre bi asphérique      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Le verre bi-asphérique est un verre de haute performance dont la courbure est optimisée sur les deux faces (avante et arrière), contrairement au verre asphérique classique qui ne l'est que sur une seule face.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Faisceau lumineux      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Un faisceau lumineux est constitué d’un ensemble de rayons lumineux. Il est représenté par ses deux rayons extrêmes.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Verre biconcave      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Sauf dans le cas particulier du verre biconcave qui possède 2 faces concaves.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Hypermétropie      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>L’hypermétropie est un défaut visuel causé le plus souvent par un œil « trop court » (longueur axiale &lt; 23mm).</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Distorsion      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>La distorsion est une aberration géométrique qui affecte la perception des formes à travers un verre optique, sans pour autant altérer la netteté de l'image.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Mesure de la réfraction      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>La mesure de la réfraction d’un œil consiste à mesurer la puissance du système optique (lunette ou lentilles) qu’il faut ajouter à l’œil pour qu’une image à l’infini se forme précisément sur la rétine.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Droite focale      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Lorsqu’un faisceau de rayons parallèles passe à travers un dioptre cylindrique les rayons vont converger en une droite, appelée droite focale.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Grand et petit méridiens      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Le grand méridien a un rayon de courbure élevé, le petit méridien à un faible rayon de courbure. De l’importance du rayon de courbure dépend la convergence de la cornée. Le petit méridien est très convergent, alors que le grand méridien est moins convergent.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Astigmatisme des faisceaux obliques      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Lorsqu’un faisceau de lumière traverse obliquement une surface sphérique, le faisceau émergeant présente un astigmatisme, donc deux méridiens de puissance.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Verre périscopique      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>On appelle un verre périscopique, un verre dont l'une des faces est plane ou concave et l'autre convexe, donnant un champ visuel une grande étendue.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Puissance focale      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>La puissance focale désigne la vergence ou puissance d’un système optique (comme le verre).</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Aberration      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Une aberration est un défaut du système optique qui conduit à la déformation des images.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Distorsion en coussinet      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Les lignes droites se courbent vers l'interieur, rappelant la forme d'un cousin ou d 'un oreiller.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Cercle de moindre diffusion      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Les 2 segments des droites reproduits sont les diamètres extrêmes de la forme ellipsoïdale : entre eux, il existe un endroit où la section du faisceau est circulaire. Ce cercle représente une image semblable mais floue du point objet et est appelé &quot;cercle de moindre diffusion&quot;.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Solution de Wollaston      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Solution de Wollaston : Verres très cambrés (très bombés), offrant la meilleure qualité optique mais peu esthétiques.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Géométrie atorique      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>On l'appelle &quot;atorique&quot; car sa géométrie s'écarte de la toricité simple pour corriger les aberrations latérales.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Aberration chromatique transversale      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Aberration chromatique transversale (latérale) : les couleurs sont décalées latéralement dans l'image.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Verre de Tscherning      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Le verre de Tscherning est une forme spécifique de verre ménisque dont les courbures son calculées pour éliminer l'astigmatisme des faiscaux obliques, offrant ainsi une vision nette même en regardant sur les côtés du verre.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Verres asphériques      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>On appelle verres asphériques, des verres dont la face frontale est corrigée de l'astigmatisme des faisceaux obliques, permettant de réaliser des verres très plats</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Faisceau cylindrique ou parallèle      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Si les rayons de lumière restent parallèles, le faisceau est cylindrique ou parallèle.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Œil amétrope      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>L’œil amétrope est un œil optiquement imparfait : l’accommodation au repos, l’image d’un objet éloigné ne converge pas au centre de la rétine sur la macula.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Astigmatisme myopique simple      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>AST myopique simple : un des deux axes est myope, CAD se concentre devant la rétine et l'autre se concentre sur la rétine.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Verre minéral      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Le verre minéral est un matériau issu du sable de silice, ce qui lui confère une grande pureté et en fait un matériau idéal pour la réalisation de verres optiques de qualité supérieure.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Distance focale      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>La distance focale (ou longueur focale) est celle qui sépare le centre optique d’une lentille de son foyer image.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Ellipse de Tscherning      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>L'Ellipse de Tscherning : C'est une courbe mathématique qui indique, pour chaque puissance de verre, les deux courbures de base idéales possibles.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Distorsion en barillet      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Les lignes droites se courbent vers l'exterieur, donnant à l'image carré ou rectangulaire la forme d'un tonneau (un barillet).</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Nombre d’Abbe      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Le nombre d'Abbe est la valeur indiquant la tendance d'une matière à séparer les couleurs.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Image virtuelle      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Une image est virtuelle lorsqu’elle ne peut se former sur un écran.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Réfraction      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Lorsque la lumière passe d’un milieu à un autre sa direction se modifie : ce phénomène de déviation est appelé réfraction.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Aberration de sphéricité      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>L’aberration sphérique naît d’une différence de mise au point entre les rayons provenant du centre de l’optique et ceux en provenance du bord.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Astigmatisme composé hypermétropique      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>AST composé hypermétropique : lorsque les axes yeux sont hypermétropes, CAD qu'ils se concentrent derrière la rétine.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Constringence      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Appelé aussi &quot;Constringence&quot;, ce terme défini la capacité d'une matière transparente à décomposer la lumière blanche.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Verre atorique      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Un verre optique atorique est un verre de haute tech conçu pour corriger l'astigmatisme de manière bcp plus précise qu'un verre torique standard.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Solution d’Ostwalt      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Solution d'Ostwalt : Verres moins cambrés, plus plats et donc plus courants en lunetterie moderne.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Géométrie du verre      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>La géométrie d'un verre en optique désigne la forme et les dimensions physiques du verre, qui influencent la manière dont il réfracte, réfléchit et transmet la lumière.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Puissance sphérométrique      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>La puissance sphérométrique d’un verre : DS = D1 + D2 Cette puissance ne tient pas compte de l’épaisseur du verre.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Aberration chromatique longitudinale      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Aberration chromatique longitudinale (axiale) : différentes couleurs ont des plans de mise au point à des distances différentes.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Verre plan concave      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Ou du verre plan-concave qui possède une face plane et une face concave.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Appairage des bases      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Si les 2 yeux ont des corrections très différentes, l'opticien peut demander une base spéciale pour harmoniser l'aspect esthétique des 2 verres (même cambrure visuelle). C'est ce que l'on appelle un &quot;Appairage des bases&quot;.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Astigmatisme mixte      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Lorsqu'un axe est myope et l'autre hypermétrope, CAD qu'un axe se concentre devant la rétine et l'autre derrière.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Indice de réfraction      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>On appelle indice de réfraction n d’un milieu, le rapport entre la vitesse de propagation V de la lumière dans l’air et la vitesse de propagation Vn de la lumière dans ce milieu.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Centre optique      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Sur le 1er schéma, on distingue le centre de la lentille, appelé centre optique, O, ainsi qu'une droite imaginaire appelée axe optique, perpendiculaire à la lentille et passant par O.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Verre ponctuel      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>On appelle verre ponctuel, un verre dont la face frontale est sphérique et dont la base est choisie suffisament cambrée pour corriger en partie l'astigmatisme des faisceaux obliques.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Presbytie      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>la presbytie n’est pas une amétropie mais un trouble de l’accommodation, qui concerne la vision de près et non pas la vision de loin</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Astigmatisme régulier      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Ce type d’astigmatisme se caractérise par la déformation de la cornée dans un seul axe.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Dioptre sphérique      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>On appelle &quot;dioptre sphérique&quot; une surface sphérique séparant 2 millieux d'indice différent (l'air et le verre en lunetterie).</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Base du verre      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>La base du verre (ou courbure de base) est la puissance exprimée en dioptries de la face frontale du verre (face convexe). Elle définit le galbe ou la cambrure du verre.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Rayons lumineux      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Les rayons lumineux sont des droites représentant le trajet de la lumière.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Verre ménisque      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>On appelle verre ménisque, un verre dont le dioptre avant est convexe et le dioptre arrière est concave.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Correction torique      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Un verre, une lentille ou un implant torique sont constitués d’une sphère, d’un cylindre et d’un axe.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Faisceau convergent      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Si les rayons de lumière arrivent au même point, le faisceau est dit convergent.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Verre sphérique      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Un verre sphérique est un corps transparent limité par 2 surfaces sphériques dont les 2 faces sont des portions de sphères ou dont une face est sphérique et l'autre plane et qui ont la propriété de faire dévier les rayons lumineux par réfraction sur ces surfaces.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Astigmatisme      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>L’astigmatisme est lié à un défaut de convergence de l’image au niveau de la rétine.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Foyers objet et image      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Sur le 2ème schéma, on a rajouté de part et d'autre de l'axe optique 2 points imaginaires, F et F', respectivement foyer objet et foyer image.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Astigmatisme simple      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>AST simple est celui dont l'une des lignes focales est situés sur la rétine (emmétrope) et l'autre en arrière ou en avant d'elle.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Astigmatisme      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>L’astigmatisme est lié à un défaut de convergence de l’image au niveau de la rétine.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Astigmatisme indirect      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Dans ce cas, l'axe le plus cambré est l'horizontal (0°), le moins cambré vertical.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Technologie FreeForm      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>La technologie FreeForm, point par point, qui nécessite des machines numériques de haute technologie couplées à des logiciels de calculs puissants.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Œil      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>L’œil est un appareil optique qui forme sur la rétine une image des objets extérieurs.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Traitements hydrophobe et oléophobe      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Tel que le traitement hydrophobe qui réduit l'adhérence de l'eau et le traitement oléophobe qui empêche les corps gras de s'accrocher fermement à la surface minérale.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Verre plan convexe      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Et du verre plan-convexe qui possède une face plane et une face convexe.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Degré d’astigmatisme      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Le degré d'AST, exprimé en dioptries, est alors égal à la différence de vergence (puissance optique) entre les 2 méridiens principaux.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Addition      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>L'addition c'est la puissance positive qu'il faut ajouter à la vision de loin pour corriger la vision de près.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Puissance frontale image      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>La puissance frontale image est la puissance réellement utilisée en pratique par les opticiens pour caractériser un verre de lunette. ▪ Elle est mesurée par rapport à la face arrière (sommet arrière) du verre. ▪ C'est la valeur indiquée par un frontofocomètre.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Astigmatisme composé      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>AST composé se produit lorsqu'aucune des lignes focales ne se repose sur la rétine et qu'aucun axe n'es emmétrope.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Dispersion      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>La dispertion est la description d'une variation de l'indice de réfraction en fonction de la longueur d'onde.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Dioptrie      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Plus précisément, une dioptrie correspond à l'inverse de la distance focale (en mètres) de la lentille d’où V = 1/f’.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Astigmatisme composé myopique      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>AST composé myopique : lorsque les 2 axes sont myopes, CAD qu'ils se concentrent devant la rétine.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Faces convexes et concaves      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Les faces d'un verre peuvent être convexes (&quot;bosses&quot;) ou concaves (&quot;creux&quot;).</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Courbure de champ      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>La courbure de champ est un défaut optique où le plan d’image net n’est pas plat mais courbe (souvent convexe ou concave).</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Axe optique ou principal      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Les centres des sphères sont alignés sur une droite appelée axe optique.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Verre biconvexe      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Et du verre biconvexe qui possède 2 faces convexes</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Aberration longitudinale de sphéricité      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Dans le cas d'une lentille convergente, le foyer des rayons extrèmes est plus près de la lentille que le foyer des rayons centraux. La distance des deux foyers constitue l'aberration longitudinale de sphéricité.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Image réelle      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Une image réelle est obtenue lorsque les rayons lumineux se concentrent, ou convergent, sur un écran ou sur un mur. La rétine fait office d’écran.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Astigmatisme oblique      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>On parle d'astigmatisme oblique lorsque les axes ne sont ni verticaux ni horizontaux (45°)</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Aberration chromatique      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>L’aberration chromatique est un défaut d’un système optique où les différentes longueurs d’onde (couleurs) ne convergent pas au même point.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Astigmatisme irrégulier      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Dans les cas simples, les deux méridiens ne se croisent plus sur le même axe.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Accommodation visuelle      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>L’accommodation visuelle est un mécanisme naturel de l’œil qui permet, en quelque sorte, de faire « une mise point automatique » et de voir net des objets à toutes les distances.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Punctum proximum PP      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Le punctum proximum (PP) est le point le plus proche que peut voir l’œil de façon nette en accommodant.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Astigmatisme hypermétropique simple      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>AST hypermétropique simple : un des 2 axes est hypermétrope, CAD se concentre derrière la rétine et l'autre se concentre sur la rétine.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Verre organique      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Le verre organique, quant à lui, est issu de la synthèse chimique de composés issus du pétrole.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Calotte sphérique      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>La calotte d'un verre sphérique (ou calotte sphérique) est la portion de surface d'une sphère délimitée par un plan.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Coma      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>D'autre part pour des incidences obliques, cette abérration se manifeste par une traînées lumineuse dissymétrique appelée &quot;coma&quot;.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Myopie      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>L’œil d’une personne myope forme un objet observé en avant de la rétine au point (f).</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Dispersion chromatique      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>La dispersion chromatique en lunetterie est un phénomène optique où le verre décompose la lumière blanche en couleurs, créant des franges colorées (aberrations chromatiques) et une vision floue, particulièrement en périphérie.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Punctum remotum PR      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Le punctum remotum (PR) est défini par le point le plus éloigné que peut voir l’œil de façon nette à l’infini pour l’œil emmétrope et sans aucun effort d’accommodation.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Vergence      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>En termes simples, la vergence représente la puissance d'une lentille, définie par son aptitude à faire converger ou diverger des rayons lumineux.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Dioptre      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Un dioptre est une surface séparant 2 millieux d'indices de réfraction différents.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Faisceau divergent      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Si les rayons de lumière partent d'un même point, le faisceau est divergent.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Astigmatisme direct      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>L'axe le plus cambré est vertical (90), le moins cambré horizontal.</div>
+    </div>
+  </div>
+</div>
+  </div>
+  <div class='hint'>Clique sur une carte pour voir la réponse. Les définitions longues peuvent défiler dans la carte.</div>
+</body>
+</html>

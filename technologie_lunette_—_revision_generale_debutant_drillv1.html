@@ -1,0 +1,175 @@
+﻿<!DOCTYPE html>
+<html lang='fr'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Technologie lunette — Révision générale - Drill</title>
+<style>
+body{font-family:Arial,sans-serif;margin:24px;background:#f7f7f7;color:#222}
+.wrap{max-width:900px;margin:0 auto}
+h1{margin-bottom:6px}.subtitle{color:#666;margin-bottom:16px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.toolbar button{padding:11px 15px;font-size:15px;cursor:pointer}
+.settings{background:#fff;border:1px solid #ddd;border-radius:10px;padding:12px 16px;margin-bottom:16px}.settings label{display:block;margin-bottom:8px}.settings input{width:min(100%,420px)}.settings small{display:block;color:#666;margin-top:6px}.start-btn{padding:13px 28px;font-size:19px;cursor:pointer}.toolbar button:disabled{opacity:.5;cursor:default}
+.counters{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.counter{background:#fff;border:1px solid #ddd;border-radius:10px;padding:12px;text-align:center}
+.counter small{display:block;color:#666;margin-bottom:4px}.counter strong{font-size:24px}
+.stage{background:#fff;border:1px solid #ddd;border-radius:14px;padding:28px;min-height:390px;display:flex;flex-direction:column;justify-content:center}
+.card{perspective:1200px;height:250px;cursor:pointer;user-select:none}
+.inner{position:relative;width:100%;height:100%;transition:transform .45s;transform-style:preserve-3d}
+.card.flipped .inner{transform:rotateY(180deg)}
+.face{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px}
+.front{background:#fff;border:2px solid #d9d9d9}.back{background:#eef4ff;border:2px solid #c7d7f2;transform:rotateY(180deg)}
+.question{font-size:clamp(30px,4vw,46px);font-weight:bold;line-height:1.25}
+.answer{font-size:clamp(18px,2.2vw,24px);font-weight:normal;line-height:1.4;color:#003366}
+.note{margin-top:14px;color:#1f4e79;font-size:18px}.result{margin-top:14px;font-size:18px;font-weight:bold}.known{color:#0a7a20}.missed{color:#b00020}
+.timer-wrap{margin-top:22px}.timer-row{display:flex;justify-content:space-between;color:#666;font-size:14px;margin-bottom:7px}
+.timer-track{height:12px;background:#e5e5e5;border-radius:999px;overflow:hidden}.timer-bar{height:100%;width:100%;background:#666;transition:width .05s linear}
+.instruction{text-align:center;color:#666;margin-top:16px;min-height:24px}.center{text-align:center;padding:40px 20px}
+@media(max-width:700px){body{margin:12px}.counters{grid-template-columns:1fr 1fr}.stage{padding:16px}.card{height:230px}}
+</style></head><body>
+<div class='wrap'>
+<h1>Technologie lunette — Révision générale</h1>
+<div class='subtitle'>FR-FR — Drill</div>
+<div class='toolbar'>
+<button id='btnPause' onclick='togglePause()' disabled>Pause</button>
+<button onclick='shufflePending()'>Mélanger les mots restants</button>
+<button onclick='resetProgress()'>Réinitialiser la progression</button>
+</div>
+<div class='settings'><label for='speed'>Vitesse : <strong id='speedLabel'>Normale (100 %)</strong></label><input id='speed' type='range' min='50' max='200' step='10' value='100' oninput='setSpeed(this.value)'><small>50 % = plus lent ; 200 % = plus rapide. La durée dépend de la longueur de la définition. Le réglage s'applique à la prochaine carte.</small></div>
+<div class='counters'>
+<div class='counter'><small>Acquis</small><strong id='known'>0</strong></div>
+<div class='counter'><small>Restants</small><strong id='remaining'>0</strong></div>
+<div class='counter'><small>À revoir</small><strong id='misses'>0</strong></div>
+<div class='counter'><small>Présentations</small><strong id='attempts'>0</strong></div>
+</div><div class='stage' id='stage'></div></div>
+<script>
+const quizId=9;
+const storageKey='lexiry_drill_'+quizId;
+const items=[
+      {id:91, q:"Verre bi asphérique", a:"Le verre bi-asphérique est un verre de haute performance dont la courbure est optimisée sur les deux faces (avante et arrière), contrairement au verre asphérique classique qui ne l’est que sur une seule face.", note:""},
+      {id:92, q:"Verre atorique", a:"Un verre optique atorique est un verre de haute tech conçu pour corriger l’astigmatisme de manière bcp plus précise qu’un verre torique standard.", note:""},
+      {id:93, q:"Géométrie atorique", a:"On l’appelle \"atorique\" car sa géométrie s’écarte de la toricité simple pour corriger les aberrations latérales.", note:""},
+      {id:94, q:"Technologie FreeForm", a:"La technologie FreeForm, point par point, qui nécessite des machines numériques de haute technologie couplées à des logiciels de calculs puissants.", note:""},
+      {id:95, q:"Addition", a:"L’addition c’est la puissance positive qu’il faut ajouter à la vision de loin pour corriger la vision de près.", note:""},
+      {id:96, q:"Œil", a:"L’œil est un appareil optique qui forme sur la rétine une image des objets extérieurs.", note:""},
+      {id:97, q:"Rayons lumineux", a:"Les rayons lumineux sont des droites représentant le trajet de la lumière.", note:""},
+      {id:98, q:"Faisceau lumineux", a:"Un faisceau lumineux est constitué d’un ensemble de rayons lumineux. Il est représenté par ses deux rayons extrêmes.", note:""},
+      {id:99, q:"Faisceau cylindrique ou parallèle", a:"Si les rayons de lumière restent parallèles, le faisceau est cylindrique ou parallèle.", note:""},
+      {id:100, q:"Faisceau convergent", a:"Si les rayons de lumière arrivent au même point, le faisceau est dit convergent.", note:""},
+      {id:101, q:"Faisceau divergent", a:"Si les rayons de lumière partent d’un même point, le faisceau est divergent.", note:""},
+      {id:102, q:"Réfraction", a:"Lorsque la lumière passe d’un milieu à un autre sa direction se modifie : ce phénomène de déviation est appelé réfraction.", note:""},
+      {id:103, q:"Image réelle", a:"Une image réelle est obtenue lorsque les rayons lumineux se concentrent, ou convergent, sur un écran ou sur un mur. La rétine fait office d’écran.", note:""},
+      {id:104, q:"Image virtuelle", a:"Une image est virtuelle lorsqu’elle ne peut se former sur un écran.", note:""},
+      {id:105, q:"Accommodation visuelle", a:"L’accommodation visuelle est un mécanisme naturel de l’œil qui permet, en quelque sorte, de faire « une mise point automatique » et de voir net des objets à toutes les distances.", note:""},
+      {id:106, q:"Punctum remotum PR", a:"Le punctum remotum (PR) est défini par le point le plus éloigné que peut voir l’œil de façon nette à l’infini pour l’œil emmétrope et sans aucun effort d’accommodation.", note:""},
+      {id:107, q:"Punctum proximum PP", a:"Le punctum proximum (PP) est le point le plus proche que peut voir l’œil de façon nette en accommodant.", note:""},
+      {id:108, q:"Mesure de la réfraction", a:"La mesure de la réfraction d’un œil consiste à mesurer la puissance du système optique (lunette ou lentilles) qu’il faut ajouter à l’œil pour qu’une image à l’infini se forme précisément sur la rétine.", note:""},
+      {id:109, q:"Œil amétrope", a:"L’œil amétrope est un œil optiquement imparfait : l’accommodation au repos, l’image d’un objet éloigné ne converge pas au centre de la rétine sur la macula.", note:""},
+      {id:110, q:"Myopie", a:"L’œil d’une personne myope forme un objet observé en avant de la rétine au point (f).", note:""},
+      {id:111, q:"Hypermétropie", a:"L’hypermétropie est un défaut visuel causé le plus souvent par un œil « trop court » (longueur axiale < 23mm).", note:""},
+      {id:112, q:"Presbytie", a:"la presbytie n’est pas une amétropie mais un trouble de l’accommodation, qui concerne la vision de près et non pas la vision de loin", note:""},
+      {id:113, q:"Astigmatisme", a:"L’astigmatisme est lié à un défaut de convergence de l’image au niveau de la rétine.", note:""},
+      {id:114, q:"Astigmatisme", a:"L’astigmatisme est lié à un défaut de convergence de l’image au niveau de la rétine.", note:""},
+      {id:115, q:"Correction torique", a:"Un verre, une lentille ou un implant torique sont constitués d’une sphère, d’un cylindre et d’un axe.", note:""},
+      {id:116, q:"Grand et petit méridiens", a:"Le grand méridien a un rayon de courbure élevé, le petit méridien à un faible rayon de courbure. De l’importance du rayon de courbure dépend la convergence de la cornée. Le petit méridien est très convergent, alors que le grand méridien est moins convergent.", note:""},
+      {id:117, q:"Astigmatisme régulier", a:"Ce type d’astigmatisme se caractérise par la déformation de la cornée dans un seul axe.", note:""},
+      {id:118, q:"Astigmatisme irrégulier", a:"Dans les cas simples, les deux méridiens ne se croisent plus sur le même axe.", note:""},
+      {id:119, q:"Astigmatisme direct", a:"L’axe le plus cambré est vertical (90), le moins cambré horizontal.", note:""},
+      {id:120, q:"Astigmatisme indirect", a:"Dans ce cas, l’axe le plus cambré est l’horizontal (0°), le moins cambré vertical.", note:""},
+      {id:121, q:"Astigmatisme oblique", a:"On parle d’astigmatisme oblique lorsque les axes ne sont ni verticaux ni horizontaux (45°)", note:""},
+      {id:122, q:"Astigmatisme simple", a:"AST simple est celui dont l’une des lignes focales est situés sur la rétine (emmétrope) et l’autre en arrière ou en avant d’elle.", note:""},
+      {id:123, q:"Astigmatisme myopique simple", a:"AST myopique simple : un des deux axes est myope, CAD se concentre devant la rétine et l’autre se concentre sur la rétine.", note:""},
+      {id:124, q:"Astigmatisme hypermétropique simple", a:"AST hypermétropique simple : un des 2 axes est hypermétrope, CAD se concentre derrière la rétine et l’autre se concentre sur la rétine.", note:""},
+      {id:125, q:"Astigmatisme composé", a:"AST composé se produit lorsqu’aucune des lignes focales ne se repose sur la rétine et qu’aucun axe n’es emmétrope.", note:""},
+      {id:126, q:"Astigmatisme composé myopique", a:"AST composé myopique : lorsque les 2 axes sont myopes, CAD qu’ils se concentrent devant la rétine.", note:""},
+      {id:127, q:"Astigmatisme composé hypermétropique", a:"AST composé hypermétropique : lorsque les axes yeux sont hypermétropes, CAD qu’ils se concentrent derrière la rétine.", note:""},
+      {id:128, q:"Astigmatisme mixte", a:"Lorsqu’un axe est myope et l’autre hypermétrope, CAD qu’un axe se concentre devant la rétine et l’autre derrière.", note:""},
+      {id:129, q:"Droite focale", a:"Lorsqu’un faisceau de rayons parallèles passe à travers un dioptre cylindrique les rayons vont converger en une droite, appelée droite focale.", note:""},
+      {id:130, q:"Cercle de moindre diffusion", a:"Les 2 segments des droites reproduits sont les diamètres extrêmes de la forme ellipsoïdale : entre eux, il existe un endroit où la section du faisceau est circulaire. Ce cercle représente une image semblable mais floue du point objet et est appelé \"cercle de moindre diffusion\".", note:""},
+      {id:131, q:"Degré d’astigmatisme", a:"Le degré d’AST, exprimé en dioptries, est alors égal à la différence de vergence (puissance optique) entre les 2 méridiens principaux.", note:""},
+      {id:132, q:"Géométrie du verre", a:"La géométrie d’un verre en optique désigne la forme et les dimensions physiques du verre, qui influencent la manière dont il réfracte, réfléchit et transmet la lumière.", note:""},
+      {id:133, q:"Verre sphérique", a:"Un verre sphérique est un corps transparent limité par 2 surfaces sphériques dont les 2 faces sont des portions de sphères ou dont une face est sphérique et l’autre plane et qui ont la propriété de faire dévier les rayons lumineux par réfraction sur ces surfaces.", note:""},
+      {id:134, q:"Dioptre", a:"Un dioptre est une surface séparant 2 millieux d’indices de réfraction différents.", note:""},
+      {id:135, q:"Dioptre sphérique", a:"On appelle \"dioptre sphérique\" une surface sphérique séparant 2 millieux d’indice différent (l’air et le verre en lunetterie).", note:""},
+      {id:136, q:"Faces convexes et concaves", a:"Les faces d’un verre peuvent être convexes (\"bosses\") ou concaves (\"creux\").", note:""},
+      {id:137, q:"Calotte sphérique", a:"La calotte d’un verre sphérique (ou calotte sphérique) est la portion de surface d’une sphère délimitée par un plan.", note:""},
+      {id:138, q:"Axe optique ou principal", a:"Les centres des sphères sont alignés sur une droite appelée axe optique.", note:""},
+      {id:139, q:"Centre optique", a:"Sur le 1er schéma, on distingue le centre de la lentille, appelé centre optique, O, ainsi qu’une droite imaginaire appelée axe optique, perpendiculaire à la lentille et passant par O.", note:""},
+      {id:140, q:"Verre ménisque", a:"On appelle verre ménisque, un verre dont le dioptre avant est convexe et le dioptre arrière est concave.", note:""},
+      {id:141, q:"Verre biconcave", a:"Sauf dans le cas particulier du verre biconcave qui possède 2 faces concaves.", note:""},
+      {id:142, q:"Verre biconvexe", a:"Et du verre biconvexe qui possède 2 faces convexes", note:""},
+      {id:143, q:"Verre plan concave", a:"Ou du verre plan-concave qui possède une face plane et une face concave.", note:""},
+      {id:144, q:"Verre plan convexe", a:"Et du verre plan-convexe qui possède une face plane et une face convexe.", note:""},
+      {id:145, q:"Puissance focale", a:"La puissance focale désigne la vergence ou puissance d’un système optique (comme le verre).", note:""},
+      {id:146, q:"Distance focale", a:"La distance focale (ou longueur focale) est celle qui sépare le centre optique d’une lentille de son foyer image.", note:""},
+      {id:147, q:"Foyers objet et image", a:"Sur le 2ème schéma, on a rajouté de part et d’autre de l’axe optique 2 points imaginaires, F et F’, respectivement foyer objet et foyer image.", note:""},
+      {id:148, q:"Puissance frontale image", a:"La puissance frontale image est la puissance réellement utilisée en pratique par les opticiens pour caractériser un verre de lunette. ▪ Elle est mesurée par rapport à la face arrière (sommet arrière) du verre. ▪ C’est la valeur indiquée par un frontofocomètre.", note:""},
+      {id:149, q:"Vergence", a:"En termes simples, la vergence représente la puissance d’une lentille, définie par son aptitude à faire converger ou diverger des rayons lumineux.", note:""},
+      {id:150, q:"Dioptrie", a:"Plus précisément, une dioptrie correspond à l’inverse de la distance focale (en mètres) de la lentille d’où V = 1/f’.", note:""},
+      {id:151, q:"Puissance sphérométrique", a:"La puissance sphérométrique d’un verre : DS = D1 + D2 Cette puissance ne tient pas compte de l’épaisseur du verre.", note:""},
+      {id:152, q:"Indice de réfraction", a:"On appelle indice de réfraction n d’un milieu, le rapport entre la vitesse de propagation V de la lumière dans l’air et la vitesse de propagation Vn de la lumière dans ce milieu.", note:""},
+      {id:153, q:"Dispersion", a:"La dispertion est la description d’une variation de l’indice de réfraction en fonction de la longueur d’onde.", note:""},
+      {id:154, q:"Dispersion chromatique", a:"La dispersion chromatique en lunetterie est un phénomène optique où le verre décompose la lumière blanche en couleurs, créant des franges colorées (aberrations chromatiques) et une vision floue, particulièrement en périphérie.", note:""},
+      {id:155, q:"Nombre d’Abbe", a:"Le nombre d’Abbe est la valeur indiquant la tendance d’une matière à séparer les couleurs.", note:""},
+      {id:156, q:"Constringence", a:"Appelé aussi \"Constringence\", ce terme défini la capacité d’une matière transparente à décomposer la lumière blanche.", note:""},
+      {id:157, q:"Verre minéral", a:"Le verre minéral est un matériau issu du sable de silice, ce qui lui confère une grande pureté et en fait un matériau idéal pour la réalisation de verres optiques de qualité supérieure.", note:""},
+      {id:158, q:"Verre organique", a:"Le verre organique, quant à lui, est issu de la synthèse chimique de composés issus du pétrole.", note:""},
+      {id:159, q:"Traitements hydrophobe et oléophobe", a:"Tel que le traitement hydrophobe qui réduit l’adhérence de l’eau et le traitement oléophobe qui empêche les corps gras de s’accrocher fermement à la surface minérale.", note:""},
+      {id:160, q:"Aberration", a:"Une aberration est un défaut du système optique qui conduit à la déformation des images.", note:""},
+      {id:161, q:"Aberration de sphéricité", a:"L’aberration sphérique naît d’une différence de mise au point entre les rayons provenant du centre de l’optique et ceux en provenance du bord.", note:""},
+      {id:162, q:"Aberration longitudinale de sphéricité", a:"Dans le cas d’une lentille convergente, le foyer des rayons extrèmes est plus près de la lentille que le foyer des rayons centraux. La distance des deux foyers constitue l’aberration longitudinale de sphéricité.", note:""},
+      {id:163, q:"Coma", a:"D’autre part pour des incidences obliques, cette abérration se manifeste par une traînées lumineuse dissymétrique appelée \"coma\".", note:""},
+      {id:164, q:"Astigmatisme des faisceaux obliques", a:"Lorsqu’un faisceau de lumière traverse obliquement une surface sphérique, le faisceau émergeant présente un astigmatisme, donc deux méridiens de puissance.", note:""},
+      {id:165, q:"Aberration chromatique", a:"L’aberration chromatique est un défaut d’un système optique où les différentes longueurs d’onde (couleurs) ne convergent pas au même point.", note:""},
+      {id:166, q:"Aberration chromatique longitudinale", a:"Aberration chromatique longitudinale (axiale) : différentes couleurs ont des plans de mise au point à des distances différentes.", note:""},
+      {id:167, q:"Aberration chromatique transversale", a:"Aberration chromatique transversale (latérale) : les couleurs sont décalées latéralement dans l’image.", note:""},
+      {id:168, q:"Courbure de champ", a:"La courbure de champ est un défaut optique où le plan d’image net n’est pas plat mais courbe (souvent convexe ou concave).", note:""},
+      {id:169, q:"Distorsion", a:"La distorsion est une aberration géométrique qui affecte la perception des formes à travers un verre optique, sans pour autant altérer la netteté de l’image.", note:""},
+      {id:170, q:"Distorsion en barillet", a:"Les lignes droites se courbent vers l’exterieur, donnant à l’image carré ou rectangulaire la forme d’un tonneau (un barillet).", note:""},
+      {id:171, q:"Distorsion en coussinet", a:"Les lignes droites se courbent vers l’interieur, rappelant la forme d’un cousin ou d ’un oreiller.", note:""},
+      {id:172, q:"Base du verre", a:"La base du verre (ou courbure de base) est la puissance exprimée en dioptries de la face frontale du verre (face convexe). Elle définit le galbe ou la cambrure du verre.", note:""},
+      {id:173, q:"Appairage des bases", a:"Si les 2 yeux ont des corrections très différentes, l’opticien peut demander une base spéciale pour harmoniser l’aspect esthétique des 2 verres (même cambrure visuelle). C’est ce que l’on appelle un \"Appairage des bases\".", note:""},
+      {id:174, q:"Ellipse de Tscherning", a:"L’Ellipse de Tscherning : C’est une courbe mathématique qui indique, pour chaque puissance de verre, les deux courbures de base idéales possibles.", note:""},
+      {id:175, q:"Solution de Wollaston", a:"Solution de Wollaston : Verres très cambrés (très bombés), offrant la meilleure qualité optique mais peu esthétiques.", note:""},
+      {id:176, q:"Solution d’Ostwalt", a:"Solution d’Ostwalt : Verres moins cambrés, plus plats et donc plus courants en lunetterie moderne.", note:""},
+      {id:177, q:"Verre de Tscherning", a:"Le verre de Tscherning est une forme spécifique de verre ménisque dont les courbures son calculées pour éliminer l’astigmatisme des faiscaux obliques, offrant ainsi une vision nette même en regardant sur les côtés du verre.", note:""},
+      {id:178, q:"Verre périscopique", a:"On appelle un verre périscopique, un verre dont l’une des faces est plane ou concave et l’autre convexe, donnant un champ visuel une grande étendue.", note:""},
+      {id:179, q:"Verre ponctuel", a:"On appelle verre ponctuel, un verre dont la face frontale est sphérique et dont la base est choisie suffisament cambrée pour corriger en partie l’astigmatisme des faisceaux obliques.", note:""},
+      {id:180, q:"Verres asphériques", a:"On appelle verres asphériques, des verres dont la face frontale est corrigée de l’astigmatisme des faisceaux obliques, permettant de réaliser des verres très plats", note:""}
+];
+const MIN_MS=4000,MAX_MS=90000,BASE_MS=3500,MS_PER_WORD=450;
+const speedKey=storageKey+'_speed';
+let speedPct=100;try{speedPct=Number(localStorage.getItem(speedKey))||100}catch(e){}speedPct=Math.max(50,Math.min(200,Math.round(speedPct/10)*10));
+const READ_BASE_MS=2000,READ_MS_PER_WORD=300,READ_MAX_MS=45000;
+let data=loadData(),queue=loadQueue(),current=null,phase='idle',timer=null,nextTimer=null,allowedMs=0,elapsedBeforePause=0,runStartedAt=0;
+function defaultState(){return{acquired:false,attempts:0,misses:0,lastReactionMs:null};}
+function loadData(){let d;try{d=JSON.parse(localStorage.getItem(storageKey)||'null')}catch(e){d=null}if(!d)d={states:{},presentations:0,totalMisses:0,queue:[]};if(!d.states)d.states={};if(!Array.isArray(d.queue))d.queue=[];items.forEach(x=>{if(!d.states[x.id])d.states[x.id]=defaultState()});return d;}
+function loadQueue(){const ids=new Set(items.map(x=>x.id));let q=(data.queue||[]).filter(id=>ids.has(id)&&!data.states[id].acquired);const seen=new Set(q);items.forEach(x=>{if(!data.states[x.id].acquired&&!seen.has(x.id))q.push(x.id)});return q;}
+function state(x){if(!data.states[x.id])data.states[x.id]=defaultState();return data.states[x.id];}
+function save(){data.queue=[...queue];localStorage.setItem(storageKey,JSON.stringify(data));updateCounters();}
+function words(s){return String(s||'').trim().split(/\s+/).filter(Boolean).length;}
+function answerTime(x){const base=BASE_MS+words(x.a)*MS_PER_WORD;return Math.round(Math.max(MIN_MS,Math.min(MAX_MS,base*100/speedPct)));}
+function readingTime(x){return Math.min(READ_MAX_MS,READ_BASE_MS+words(x.a)*READ_MS_PER_WORD);}
+function setSpeed(v){speedPct=Math.max(50,Math.min(200,Number(v)||100));document.getElementById('speedLabel').textContent=(speedPct<100?'Lente':speedPct>100?'Rapide':'Normale')+' ('+speedPct+' %)';try{localStorage.setItem(speedKey,String(speedPct))}catch(e){}}
+function showStartScreen(){clearTimers();current=null;phase='idle';document.getElementById('btnPause').disabled=true;document.getElementById('btnPause').textContent='Pause';document.getElementById('stage').innerHTML='<div class="center"><h2>Prêt à réviser ?</h2><p>Réglez votre vitesse, puis démarrez le Drill lorsque vous êtes prêt.</p><button class="start-btn" onclick="beginDrill()">Commencer</button></div>';}
+function beginDrill(){if(phase!=='idle')return;document.getElementById('btnPause').disabled=false;showQuestion();}
+function elapsed(){return phase==='question'&&runStartedAt?elapsedBeforePause+(performance.now()-runStartedAt):elapsedBeforePause;}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function updateCounters(){const k=items.filter(x=>state(x).acquired).length;document.getElementById('known').textContent=k+' / '+items.length;document.getElementById('remaining').textContent=items.length-k;document.getElementById('misses').textContent=data.totalMisses;document.getElementById('attempts').textContent=data.presentations;}
+function cardHtml(){return '<div class="card" id="card"><div class="inner"><div class="face front"><div class="question">'+esc(current.q)+'</div>'+(current.note?'<div class="note">['+esc(current.note)+']</div>':'')+'</div><div class="face back"><div class="answer">'+esc(current.a)+'</div><div class="result" id="result"></div></div></div></div><div class="timer-wrap"><div class="timer-row"><span>Temps de réponse</span><span id="timerText"></span></div><div class="timer-track"><div class="timer-bar" id="timerBar"></div></div></div><div class="instruction">Répondez oralement, puis cliquez sur la carte avant la fin du délai.</div>';}
+function showQuestion(){clearTimers();if(queue.length===0){done();return}current=items.find(x=>x.id===queue[0]);if(!current){queue.shift();save();showQuestion();return}allowedMs=answerTime(current);elapsedBeforePause=0;runStartedAt=performance.now();phase='question';data.presentations++;state(current).attempts++;save();document.getElementById('stage').innerHTML=cardHtml();document.getElementById('card').addEventListener('click',knownAnswer);startTimer();}
+function startTimer(){updateTimer();timer=setInterval(()=>{if(phase!=='question')return;updateTimer();if(elapsed()>=allowedMs)timeoutAnswer()},50);}
+function updateTimer(){const e=Math.min(allowedMs,elapsed()),r=Math.max(0,allowedMs-e),p=allowedMs?(r/allowedMs)*100:0;const b=document.getElementById('timerBar'),t=document.getElementById('timerText');if(b)b.style.width=p+'%';if(t)t.textContent=(r/1000).toFixed(1)+' s';}
+function knownAnswer(){if(phase!=='question')return;const r=Math.min(allowedMs,elapsed()),s=state(current);s.acquired=true;s.lastReactionMs=Math.round(r);queue.shift();reveal(true,readingTime(current));save();}
+function timeoutAnswer(){if(phase!=='question')return;const s=state(current);s.misses++;data.totalMisses++;const id=queue.shift();queue.push(id);reveal(false,readingTime(current));save();}
+function reveal(ok,delay){if(timer){clearInterval(timer);timer=null}phase='reveal';const c=document.getElementById('card');if(c)c.classList.add('flipped');const r=document.getElementById('result');if(r){r.textContent=ok?'Acquis':'À revoir';r.className='result '+(ok?'known':'missed')}const t=document.getElementById('timerText');if(t)t.textContent='';const b=document.getElementById('timerBar');if(b)b.style.width='0%';nextTimer=setTimeout(showQuestion,delay);}
+function togglePause(){if(phase==='question')pause();else if(phase==='paused')resume();}
+function pause(){if(phase!=='question')return;elapsedBeforePause=elapsed();runStartedAt=0;phase='paused';if(timer){clearInterval(timer);timer=null}document.getElementById('btnPause').textContent='Reprendre';document.getElementById('stage').innerHTML='<div class="center"><h2>Drill en pause</h2><p>La carte est masquée et le chronomètre est arrêté.</p><button onclick="resume()">Reprendre</button></div>';}
+function resume(){if(phase!=='paused'||!current)return;phase='question';runStartedAt=performance.now();document.getElementById('btnPause').textContent='Pause';document.getElementById('stage').innerHTML=cardHtml();document.getElementById('card').addEventListener('click',knownAnswer);startTimer();}
+function shufflePending(){if(phase==='reveal')return;if(!confirm('Mélanger les mots restant à travailler ?'))return;clearTimers();for(let i=queue.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[queue[i],queue[j]]=[queue[j],queue[i]]}save();showStartScreen();}
+function resetProgress(){if(!confirm('Effacer toute la progression du drill et remettre tous les compteurs à zéro ?'))return;clearTimers();localStorage.removeItem(storageKey);data={states:{},presentations:0,totalMisses:0,queue:[]};items.forEach(x=>data.states[x.id]=defaultState());queue=items.map(x=>x.id);save();showStartScreen();}
+function clearTimers(){if(timer){clearInterval(timer);timer=null}if(nextTimer){clearTimeout(nextTimer);nextTimer=null}}
+function done(){clearTimers();phase='done';document.getElementById('btnPause').disabled=true;document.getElementById('btnPause').textContent='Pause';document.getElementById('stage').innerHTML='<div class="center"><h2>Drill terminé</h2><p>Tous les mots ont été acquis.</p><p>Présentations : <strong>'+data.presentations+'</strong> — Réponses hors délai : <strong>'+data.totalMisses+'</strong></p><button onclick="resetProgress()">Recommencer depuis zéro</button></div>';updateCounters();}
+document.getElementById('speed').value=speedPct;setSpeed(speedPct);updateCounters();save();if(queue.length===0)done();else showStartScreen();
+</script></body></html>

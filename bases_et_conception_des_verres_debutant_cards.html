@@ -1,0 +1,189 @@
+﻿<!DOCTYPE html>
+<html lang='fr'>
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <title>Bases_et_conception_des_verres</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; background: #f7f7f7; color: #222; }
+    h1 { margin-bottom: 6px; overflow-wrap: anywhere; }
+    .subtitle { color: #666; margin-bottom: 20px; }
+    .toolbar { margin-bottom: 20px; }
+    .toolbar button { margin-right: 10px; padding: 8px 12px; cursor: pointer; }
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,260px),1fr)); gap: 16px; }
+    .flashcard { perspective: 1000px; cursor: pointer; height: 260px; min-width: 0; }
+    .flashcard-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
+    .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+    .flashcard-front, .flashcard-back { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); padding: 16px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
+    .flashcard-front { background: #ffffff; border: 1px solid #ddd; }
+    .flashcard-back { background: #eef4ff; border: 1px solid #c7d7f2; transform: rotateY(180deg); }
+    .question { font-size: 22px; font-weight: bold; line-height: 1.35; max-height: 100%; overflow-y: auto; overflow-wrap: anywhere; width: 100%; scrollbar-width: thin; }
+    .note { margin-top: 10px; font-size: 15px; color: #1f4e79; font-weight: normal; }
+    .answer { font-size: 17px; font-weight: normal; color: #003366; line-height: 1.4; max-height: 100%; overflow-y: auto; overflow-wrap: anywhere; width: 100%; scrollbar-width: thin; overscroll-behavior: contain; }
+    .hint { margin-top: 18px; color: #666; font-size: 14px; }
+    @media (max-width: 600px) { body { margin: 14px; } .flashcard { height: 280px; } .question { font-size: 20px; } }
+  </style>
+  <script>
+    function flipAll() { document.querySelectorAll('.flashcard').forEach(el => el.classList.add('flipped')); }
+    function unflipAll() { document.querySelectorAll('.flashcard').forEach(el => el.classList.remove('flipped')); }
+    function fitAnswers() {
+      document.querySelectorAll('.answer').forEach(el => {
+        const n = el.textContent.trim().length;
+        el.style.fontSize = (n < 100 ? 17 : n < 200 ? 15 : n < 350 ? 14 : 13) + 'px';
+      });
+    }
+    document.addEventListener('DOMContentLoaded', fitAnswers);
+  </script>
+</head>
+<body>
+  <h1>Bases_et_conception_des_verres</h1>
+  <div class='subtitle'>FR-FR</div>
+  <div class='toolbar'>
+    <button onclick='flipAll()'>Tout retourner</button>
+    <button onclick='unflipAll()'>Tout remettre</button>
+  </div>
+  <div class='cards-grid'>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Verre bi asphérique      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Le verre bi-asphérique est un verre de haute performance dont la courbure est optimisée sur les deux faces (avante et arrière), contrairement au verre asphérique classique qui ne l'est que sur une seule face.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Verre atorique      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Un verre optique atorique est un verre de haute tech conçu pour corriger l'astigmatisme de manière bcp plus précise qu'un verre torique standard.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Géométrie atorique      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>On l'appelle &quot;atorique&quot; car sa géométrie s'écarte de la toricité simple pour corriger les aberrations latérales.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Technologie FreeForm      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>La technologie FreeForm, point par point, qui nécessite des machines numériques de haute technologie couplées à des logiciels de calculs puissants.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Addition      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>L'addition c'est la puissance positive qu'il faut ajouter à la vision de loin pour corriger la vision de près.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Base du verre      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>La base du verre (ou courbure de base) est la puissance exprimée en dioptries de la face frontale du verre (face convexe). Elle définit le galbe ou la cambrure du verre.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Appairage des bases      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Si les 2 yeux ont des corrections très différentes, l'opticien peut demander une base spéciale pour harmoniser l'aspect esthétique des 2 verres (même cambrure visuelle). C'est ce que l'on appelle un &quot;Appairage des bases&quot;.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Ellipse de Tscherning      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>L'Ellipse de Tscherning : C'est une courbe mathématique qui indique, pour chaque puissance de verre, les deux courbures de base idéales possibles.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Solution de Wollaston      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Solution de Wollaston : Verres très cambrés (très bombés), offrant la meilleure qualité optique mais peu esthétiques.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Solution d’Ostwalt      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Solution d'Ostwalt : Verres moins cambrés, plus plats et donc plus courants en lunetterie moderne.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Verre de Tscherning      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>Le verre de Tscherning est une forme spécifique de verre ménisque dont les courbures son calculées pour éliminer l'astigmatisme des faiscaux obliques, offrant ainsi une vision nette même en regardant sur les côtés du verre.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Verre périscopique      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>On appelle un verre périscopique, un verre dont l'une des faces est plane ou concave et l'autre convexe, donnant un champ visuel une grande étendue.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Verre ponctuel      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>On appelle verre ponctuel, un verre dont la face frontale est sphérique et dont la base est choisie suffisament cambrée pour corriger en partie l'astigmatisme des faisceaux obliques.</div>
+    </div>
+  </div>
+</div>
+<div class='flashcard' onclick="this.classList.toggle('flipped')">
+  <div class='flashcard-inner'>
+    <div class='flashcard-front'>
+      <div class='question'>Verres asphériques      </div>
+    </div>
+    <div class='flashcard-back'>
+      <div class='answer'>On appelle verres asphériques, des verres dont la face frontale est corrigée de l'astigmatisme des faisceaux obliques, permettant de réaliser des verres très plats</div>
+    </div>
+  </div>
+</div>
+  </div>
+  <div class='hint'>Clique sur une carte pour voir la réponse. Les définitions longues peuvent défiler dans la carte.</div>
+</body>
+</html>
